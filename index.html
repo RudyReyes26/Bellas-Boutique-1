@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bellas Boutique | Inicio</title>
+
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    />
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="css/global.css" />
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom py-3">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-3" href="index.html">
+        <div class="logo-circle brand-gradient">B</div>
+        <div>
+            <div class="brand-title">Bellas Boutique</div>
+            <small class="text-muted">Estilo & Elegancia</small>
+        </div>
+        </a>
+
+        <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarContenido"
+        aria-controls="navbarContenido"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+        >
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContenido">
+        <form class="d-none d-lg-flex mx-auto search-form">
+            <div class="input-group">
+            <span class="input-group-text search-icon">
+                <i class="bi bi-search"></i>
+                </span>
+            <input
+                class="form-control search-rounded"
+                type="search"
+                placeholder="Buscar productos..."
+            />
+            </div>
+        </form>
+
+        <ul class="navbar-nav align-items-lg-center ms-auto gap-lg-3">
+            <li class="nav-item">
+            <a class="nav-link active-link" href="catalogo.html">Catálogo</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="soporte.html">Soporte</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link icon-link" href="perfil.html">
+                <i class="bi bi-person"></i>
+            </a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link icon-link position-relative" href="carrito.html">
+                <i class="bi bi-cart3"></i>
+                <span class="cart-badge">3</span>
+            </a>
+            </li>
+            <li class="nav-item ms-lg-2">
+            <a class="btn btn-gradient btn-sm px-4" href="login.html">Ingresar</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+
+    
+    <header class="hero-gradient text-white py-5">
+    <div class="container py-4">
+        <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1 class="display-3 fw-bold mb-3">Colección Primavera 2026</h1>
+            <p class="fs-3 mb-4">
+            Descubre las últimas tendencias en moda femenina
+            </p>
+            <a href="catalogo.html" class="btn btn-light btn-lg fw-bold px-4">
+            Ver catálogo
+            </a>
+        </div>
+        </div>
+    </div>
+    </header>
+
+    <!-- Categorías -->
+    <section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h2 class="section-title mb-1">Explora nuestras categorías</h2>
+            <p class="text-muted mb-0">
+            Encuentra ropa, calzado y accesorios para cada ocasión
+            </p>
+        </div>
+        <a href="catalogo.html" class="btn btn-outline-dark rounded-pill px-4">
+            Ir al catálogo
+        </a>
+        </div>
+
+        <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card card-soft category-card h-100">
+            <div class="card-body p-4">
+                <div class="category-icon mb-3">
+                <i class="bi bi-bag-heart"></i>
+                </div>
+                <h3 class="h4 fw-bold">Ropa</h3>
+                <p class="text-muted">
+                Vestidos, blusas, faldas y prendas elegantes para cualquier evento.
+                </p>
+                <a href="catalogo.html" class="btn btn-gradient">Explorar</a>
+            </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-soft category-card h-100">
+            <div class="card-body p-4">
+                <div class="category-icon mb-3">
+                <i class="bi bi-stars"></i>
+                </div>
+                <h3 class="h4 fw-bold">Calzado</h3>
+                <p class="text-muted">
+                Tacones, sandalias y opciones sofisticadas para complementar tu estilo.
+                </p>
+                <a href="catalogo.html" class="btn btn-gradient">Explorar</a>
+            </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-soft category-card h-100">
+            <div class="card-body p-4">
+                <div class="category-icon mb-3">
+                <i class="bi bi-handbag"></i>
+                </div>
+                <h3 class="h4 fw-bold">Accesorios</h3>
+                <p class="text-muted">
+                Bolsos, aretes y detalles únicos para elevar cada outfit.
+                </p>
+                <a href="catalogo.html" class="btn btn-gradient">Explorar</a>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- Destacados -->
+    <section class="pb-5">
+    <div class="container">
+        <h2 class="section-title mb-4">Productos destacados</h2>
+
+        <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-soft product-card h-100">
+            <img
+                src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1200&auto=format&fit=crop"
+                class="card-img-top product-image"
+                alt="Vestido elegante"
+            />
+            <div class="card-body">
+                <h5 class="fw-bold">Vestido Elegante Rosa</h5>
+                <p class="text-muted mb-2">Ideal para eventos especiales.</p>
+                <div class="price-primary">₡45,000</div>
+            </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-soft product-card h-100">
+            <img
+                src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=1200&auto=format&fit=crop"
+                class="card-img-top product-image"
+                alt="Bolso elegante"
+            />
+            <div class="card-body">
+                <h5 class="fw-bold">Bolso de Cuero Premium</h5>
+                <p class="text-muted mb-2">Diseño moderno y elegante.</p>
+                <div class="price-primary">₡85,000</div>
+            </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-soft product-card h-100">
+            <img
+                src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=1200&auto=format&fit=crop"
+                class="card-img-top product-image"
+                alt="Tacones elegantes"
+            />
+            <div class="card-body">
+                <h5 class="fw-bold">Zapatos de Tacón Elegantes</h5>
+                <p class="text-muted mb-2">Un clásico que combina con todo.</p>
+                <div class="price-primary">₡55,000</div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+
+        <!-- Footer -->
+    <footer class="footer-gradient mt-5">
+    <div class="container">
+        <div class="row g-4">
+        <div class="col-md-3">
+            <h4 class="fw-bold">Bellas Boutique</h4>
+            <p class="mb-0">
+            Tu destino para moda elegante y accesorios únicos.
+            </p>
+        </div>
+
+        <div class="col-md-3">
+            <h5 class="fw-bold">Comprar</h5>
+            <ul class="list-unstyled footer-links">
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="catalogo.html">Nuevos Ingresos</a></li>
+            <li><a href="catalogo.html">Ofertas</a></li>
+            </ul>
+        </div>
+
+        <div class="col-md-3">
+            <h5 class="fw-bold">Ayuda</h5>
+            <ul class="list-unstyled footer-links">
+            <li><a href="soporte.html">Soporte</a></li>
+            <li><a href="soporte.html">Envíos</a></li>
+            <li><a href="soporte.html">Devoluciones</a></li>
+            </ul>
+        </div>
+
+        <div class="col-md-3">
+            <h5 class="fw-bold">Contacto</h5>
+            <ul class="list-unstyled footer-links">
+            <li>info@bellasboutique.com</li>
+            <li>+506 2222-3333</li>
+            <li>+506 8888-9999</li>
+            </ul>
+        </div>
+        </div>
+
+        <hr class="footer-divider" />
+        <p class="text-center mb-0">© 2026 Bellas Boutique. Todos los derechos reservados.</p>
+    </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

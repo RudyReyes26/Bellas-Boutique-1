@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="es">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bellas Boutique | Registro</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    />
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="css/global.css" />
+
+    <style>
+        .register-wrapper {
+        min-height: 100vh;
+        background: linear-gradient(
+            135deg,
+            rgba(247, 37, 133, 0.1),
+            rgba(142, 45, 226, 0.1)
+        );
+        }
+
+        .register-card {
+        border: none;
+        border-radius: 24px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        }
+
+        .register-side {
+        background: linear-gradient(135deg, #f72585, #8e2de2);
+        color: white;
+        padding: 3rem;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        }
+
+        .register-logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, 0.18);
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        }
+
+        .register-form {
+        background: white;
+        padding: 3rem;
+        }
+
+        .register-title {
+        color: #081a37;
+        font-weight: 800;
+        }
+
+        .register-subtitle {
+        color: #6b7280;
+        }
+
+        .form-control,
+        .form-select {
+        border-radius: 14px;
+        padding: 0.85rem 1rem;
+        border: 1px solid #d7dce4;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+        box-shadow: none;
+        border-color: #d946ef;
+        }
+
+        .register-link {
+        color: #f72585;
+        font-weight: 600;
+        text-decoration: none;
+        }
+
+        .register-link:hover {
+        color: #c2185b;
+        }
+
+        .hint-box {
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 1rem;
+        }
+
+        @media (max-width: 991.98px) {
+        .register-side {
+            display: none;
+        }
+
+        .register-form {
+            padding: 2rem;
+        }
+        }
+    </style>
+    </head>
+    <body>
+    <section class="register-wrapper d-flex align-items-center py-5">
+        <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-11">
+            <div class="card register-card">
+                <div class="row g-0">
+                <div class="col-lg-4">
+                    <div class="register-side h-100">
+                    <div class="register-logo">B</div>
+                    <h1 class="fw-bold mb-3">Crea tu cuenta</h1>
+                    <p class="mb-4 fs-5">
+                        Regístrate para comprar, administrar productos o gestionar
+                        la tienda.
+                    </p>
+                    <div class="small">
+                        Completa el formulario con tus datos personales.
+                    </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="register-form">
+                    <div class="mb-4">
+                        <h2 class="register-title mb-2">Registro de usuario</h2>
+                        <p class="register-subtitle mb-0">
+                        Completa la información solicitada
+                        </p>
+                    </div>
+
+                    <form id="registroForm">
+                        <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="idUsuario" class="form-label fw-semibold"
+                            >ID</label
+                            >
+                            <input
+                            type="number"
+                            class="form-control"
+                            id="idUsuario"
+                            placeholder="Ej: 4"
+                            required
+                            />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="cedula" class="form-label fw-semibold"
+                            >Cédula</label
+                            >
+                            <input
+                            type="text"
+                            class="form-control"
+                            id="cedula"
+                            placeholder="Ej: 101110111"
+                            required
+                            />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label fw-semibold"
+                            >Nombre</label
+                            >
+                            <input
+                            type="text"
+                            class="form-control"
+                            id="nombre"
+                            placeholder="Nombre"
+                            required
+                            />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="apellidos" class="form-label fw-semibold"
+                            >Apellidos</label
+                            >
+                            <input
+                            type="text"
+                            class="form-control"
+                            id="apellidos"
+                            placeholder="Apellidos"
+                            required
+                            />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="correo" class="form-label fw-semibold"
+                            >Correo electrónico</label
+                            >
+                            <input
+                            type="email"
+                            class="form-control"
+                            id="correo"
+                            placeholder="ejemplo@correo.com"
+                            required
+                            />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="telefono" class="form-label fw-semibold"
+                            >Teléfono</label
+                            >
+                            <input
+                            type="text"
+                            class="form-control"
+                            id="telefono"
+                            placeholder="8888-9999"
+                            required
+                            />
+                        </div>
+
+                        <div class="col-12">
+                            <label for="direccion" class="form-label fw-semibold"
+                            >Dirección</label
+                            >
+                            <input
+                            type="text"
+                            class="form-control"
+                            id="direccion"
+                            placeholder="Provincia, cantón, distrito, señas"
+                            required
+                            />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="rol" class="form-label fw-semibold"
+                            >Rol</label
+                            >
+                            <select class="form-select" id="rol" required>
+                            <option value="">Seleccione un rol</option>
+                            <option value="Cliente">Cliente</option>
+                            <option value="Vendedor">Vendedor</option>
+                            <option value="Administrador">Administrador</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="password" class="form-label fw-semibold"
+                            >Contraseña</label
+                            >
+                            <input
+                            type="password"
+                            class="form-control"
+                            id="password"
+                            placeholder="Mínimo 8 caracteres"
+                            required
+                            />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label
+                            for="confirmPassword"
+                            class="form-label fw-semibold"
+                            >Confirmar contraseña</label
+                            >
+                            <input
+                            type="password"
+                            class="form-control"
+                            id="confirmPassword"
+                            placeholder="Repite la contraseña"
+                            required
+                            />
+                        </div>
+                        </div>
+
+                        <div class="hint-box mt-4">
+                        <div class="fw-bold mb-2">Reglas de contraseña</div>
+                        <small>
+                            Debe tener al menos 8 caracteres, una mayúscula, una
+                            minúscula y un número.
+                        </small>
+                        </div>
+
+                        <div id="registroAlert" class="mt-3"></div>
+
+                        <button
+                        type="submit"
+                        class="btn btn-gradient w-100 py-3 mt-4"
+                        >
+                        <i class="bi bi-person-plus me-2"></i>
+                        Registrarse
+                        </button>
+
+                        <div class="text-center mt-4">
+                        <span class="text-muted">¿Ya tienes cuenta?</span>
+                        <a href="login.html" class="register-link ms-1"
+                            >Iniciar sesión</a
+                        >
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <script src="js/data.js"></script>
+    <script>
+        if (!localStorage.getItem("usuarios")) {
+        localStorage.setItem("usuarios", JSON.stringify(seedUsuarios));
+        }
+
+        const registroForm = document.getElementById("registroForm");
+        const registroAlert = document.getElementById("registroAlert");
+
+        function validarPassword(password) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        return regex.test(password);
+        }
+
+        registroForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const id = Number(document.getElementById("idUsuario").value.trim());
+        const cedula = document.getElementById("cedula").value.trim();
+        const nombre = document.getElementById("nombre").value.trim();
+        const apellidos = document.getElementById("apellidos").value.trim();
+        const correo = document.getElementById("correo").value.trim();
+        const telefono = document.getElementById("telefono").value.trim();
+        const direccion = document.getElementById("direccion").value.trim();
+        const rol = document.getElementById("rol").value;
+        const password = document.getElementById("password").value.trim();
+        const confirmPassword = document
+            .getElementById("confirmPassword")
+            .value.trim();
+
+        const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+        if (usuarios.some((u) => u.id === id)) {
+            registroAlert.innerHTML = `
+            <div class="alert alert-danger rounded-4">
+            Ya existe un usuario con ese ID.
+            </div>
+        `;
+            return;
+        }
+
+        if (
+            usuarios.some((u) => u.correo.toLowerCase() === correo.toLowerCase())
+        ) {
+            registroAlert.innerHTML = `
+            <div class="alert alert-danger rounded-4">
+            Ya existe un usuario registrado con ese correo.
+            </div>
+        `;
+            return;
+        }
+
+        if (!validarPassword(password)) {
+            registroAlert.innerHTML = `
+            <div class="alert alert-warning rounded-4">
+            La contraseña no cumple con los requisitos mínimos de seguridad.
+            </div>
+        `;
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            registroAlert.innerHTML = `
+            <div class="alert alert-danger rounded-4">
+            Las contraseñas no coinciden.
+            </div>
+        `;
+            return;
+        }
+
+        const nuevoUsuario = {
+            id,
+            cedula,
+            nombre,
+            apellidos,
+            correo,
+            telefono,
+            direccion,
+            password,
+            rol,
+            estado: "Activo",
+        };
+
+        usuarios.push(nuevoUsuario);
+        localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+        registroAlert.innerHTML = `
+        <div class="alert alert-success rounded-4">
+            Usuario registrado correctamente. Ahora puedes iniciar sesión.
+        </div>
+        `;
+
+        registroForm.reset();
+
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1200);
+        });
+    </script>
+    </body>
+</html>

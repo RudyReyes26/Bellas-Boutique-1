@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bellas Boutique | Login</title>
+
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    />
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="css/global.css" />
+
+    <style>
+    .auth-wrapper {
+        min-height: 100vh;
+        background: linear-gradient(
+        135deg,
+        rgba(247, 37, 133, 0.12),
+        rgba(142, 45, 226, 0.12)
+        );
+    }
+
+    .auth-card {
+        border: none;
+        border-radius: 24px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .auth-brand-side {
+        background: linear-gradient(135deg, #f72585, #8e2de2);
+        color: white;
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 100%;
+    }
+
+    .auth-logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, 0.18);
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+    }
+
+    .auth-form-side {
+        background: white;
+        padding: 3rem;
+    }
+
+    .auth-title {
+        color: #081a37;
+        font-weight: 800;
+    }
+
+    .auth-subtitle {
+        color: #6b7280;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 14px;
+        padding: 0.85rem 1rem;
+        border: 1px solid #d7dce4;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        box-shadow: none;
+        border-color: #d946ef;
+    }
+
+    .auth-link {
+        color: #f72585;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .auth-link:hover {
+        color: #c2185b;
+    }
+
+    .input-icon {
+        position: relative;
+    }
+
+    .input-icon i {
+        position: absolute;
+        top: 50%;
+        right: 16px;
+        transform: translateY(-50%);
+        color: #94a3b8;
+    }
+
+    @media (max-width: 991.98px) {
+        .auth-brand-side {
+        display: none;
+        }
+
+        .auth-form-side {
+        padding: 2rem;
+        }
+    }
+    </style>
+</head>
+<body>
+    <section class="auth-wrapper d-flex align-items-center py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+        <div class="col-xl-10">
+            <div class="card auth-card">
+            <div class="row g-0">
+                <div class="col-lg-5">
+                <div class="auth-brand-side h-100">
+                    <div class="auth-logo">B</div>
+                    <h1 class="fw-bold mb-3">Bellas Boutique</h1>
+                    <p class="mb-4 fs-5">
+                    Accede a tu cuenta para disfrutar de una experiencia elegante,
+                    rápida y personalizada.
+                    </p>
+                    <div class="small">
+                    Estilo, moda y elegancia en un solo lugar.
+                    </div>
+                </div>
+                </div>
+
+                <div class="col-lg-7">
+                <div class="auth-form-side">
+                    <div class="mb-4">
+                    <h2 class="auth-title mb-2">Iniciar sesión</h2>
+                    <p class="auth-subtitle mb-0">
+                        Ingresa tus credenciales para continuar
+                    </p>
+                    </div>
+
+                    <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="correo" class="form-label fw-semibold">Correo electrónico</label>
+                        <div class="input-icon">
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="correo"
+                            placeholder="ejemplo@correo.com"
+                            required
+                        />
+                        <i class="bi bi-envelope"></i>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-semibold">Contraseña</label>
+                        <div class="input-icon">
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="password"
+                            placeholder="Ingresa tu contraseña"
+                            required
+                        />
+                        <i class="bi bi-lock"></i>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="recordarme" />
+                        <label class="form-check-label" for="recordarme">
+                            Recordarme
+                        </label>
+                        </div>
+
+                        <a href="#" class="auth-link">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <div id="loginAlert" class="mb-3"></div>
+
+                    <button type="submit" class="btn btn-gradient w-100 py-3">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        Ingresar
+                    </button>
+
+                    <div class="text-center mt-4">
+                        <span class="text-muted">¿No tienes cuenta?</span>
+                        <a href="registro.html" class="auth-link ms-1">Crear cuenta</a>
+                    </div>
+
+                    <div class="mt-4 p-3 rounded-4" style="background:#f8fafc; border:1px solid #e5e7eb;">
+                        <div class="fw-bold mb-2">Usuarios de prueba</div>
+                        <small class="d-block">Cliente: cliente@bellas.com / Cliente123*</small>
+                        <small class="d-block">Vendedor: vendedor@bellas.com / Vendedor123*</small>
+                        <small class="d-block">Administrador: admin@bellas.com / Admin123*</small>
+                    </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+
+    <script src="js/data.js"></script>
+    <script>
+    if (!localStorage.getItem("usuarios")) {
+        localStorage.setItem("usuarios", JSON.stringify(seedUsuarios));
+    }
+
+    if (!localStorage.getItem("intentosLogin")) {
+        localStorage.setItem("intentosLogin", JSON.stringify([]));
+    }
+
+    const loginForm = document.getElementById("loginForm");
+    const loginAlert = document.getElementById("loginAlert");
+
+    loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const correo = document.getElementById("correo").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+        const intentosLogin = JSON.parse(localStorage.getItem("intentosLogin")) || [];
+
+        const usuario = usuarios.find(
+        u =>
+            u.correo.toLowerCase() === correo.toLowerCase() &&
+            u.password === password &&
+            u.estado === "Activo"
+        );
+
+        intentosLogin.push({
+        correo,
+        fecha: new Date().toLocaleString(),
+        resultado: usuario ? "Exitoso" : "Fallido"
+        });
+
+        localStorage.setItem("intentosLogin", JSON.stringify(intentosLogin));
+
+        if (!usuario) {
+        loginAlert.innerHTML = `
+            <div class="alert alert-danger rounded-4">
+            Correo o contraseña incorrectos.
+            </div>
+        `;
+        return;
+        }
+
+        localStorage.setItem("sesionActiva", JSON.stringify(usuario));
+
+        loginAlert.innerHTML = `
+        <div class="alert alert-success rounded-4">
+            Inicio de sesión exitoso. Redirigiendo...
+        </div>
+        `;
+
+        setTimeout(() => {
+        if (usuario.rol === "Cliente") {
+            window.location.href = "catalogo.html";
+        } else {
+            window.location.href = "admin-dashboard.html";
+        }
+        }, 1000);
+    });
+    </script>
+</body>
+</html>
