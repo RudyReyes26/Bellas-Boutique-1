@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Carrito de Compras - Bellas Boutique</title>
+
+    <!-- Bootstrap & icons (se mantienen para la apariencia del header/footer) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <link rel="stylesheet" href="css/global.css" />
+
+    <style>
+        :root{
+            --bg:#f6f8f9; --card:#ffffff; --muted:#7b8794; --accent:#ff0080;
+            --accent-2:#7f00ff; --shadow: 0 6px 18px rgba(38,50,56,0.06);
+            --radius:12px;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+        body{
+            margin:0;
+            background:var(--bg);
+            color:#0f1724;
+            /* espacio inferior para que el contenido no quede debajo del footer fijo */
+            padding-bottom:160px;
+        }
+        /* layout and cart item styles (keep these, header/footer come from shared CSS) */
+        .container{max-width:1180px;margin:18px auto;padding:0 24px;display:flex;gap:28px;align-items:flex-start}
+        h1{font-size:28px;margin:6px 0 20px}
+        .left{flex:1}
+        .right{width:360px}
+        .cart-item{display:flex;align-items:center;gap:18px;background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow);margin-bottom:18px;position:relative}
+        .ci-img{width:96px;height:96px;border-radius:10px;overflow:hidden;flex:0 0 96px}
+        .ci-img img{width:100%;height:100%;object-fit:cover;display:block}
+        .ci-info{flex:1}
+        .ci-title{font-weight:700;margin-bottom:6px}
+        .ci-meta{color:var(--muted);font-size:13px;margin-bottom:10px}
+        .qty{display:flex;align-items:center;gap:10px}
+        .qty button{width:36px;height:32px;border-radius:8px;border:1px solid #e6e9ee;background:#fff;cursor:pointer;font-size:18px}
+        .qty span{min-width:36px;text-align:center;font-weight:600}
+        .ci-price{font-weight:800;color:var(--accent);text-align:right;min-width:120px;margin-right:48px}
+        .ci-sub{color:var(--muted);font-size:12px;text-align:right}
+        .trash{position:absolute;right:18px;top:16px;border-radius:8px;background:#fff;border:none;padding:8px;cursor:pointer}
+        .summary{background:var(--card);padding:20px;border-radius:12px;box-shadow:var(--shadow)}
+        .summary h3{margin:0 0 12px}
+        .coupon{display:flex;gap:8px;margin-bottom:18px}
+        .coupon input{flex:1;padding:12px;border-radius:8px;border:1px solid #e6e9ee}
+        .btn-apply{background:#111827;color:#fff;padding:10px 14px;border-radius:8px;border:none;cursor:pointer}
+        .summary-row{display:flex;justify-content:space-between;padding:8px 0;color:var(--muted)}
+        .summary-total{display:flex;justify-content:space-between;padding:18px 0;font-weight:800;font-size:18px}
+        .btn-primary{width:100%;padding:14px;border-radius:12px;border:none;color:#fff;background:linear-gradient(90deg,var(--accent),var(--accent-2));cursor:pointer;margin-bottom:12px}
+        .btn-secondary{width:100%;padding:12px;border-radius:12px;border:1px solid #ffd3e7;color:var(--accent);background:transparent;cursor:pointer}
+        /* small helpers */
+        .muted{color:var(--muted)}
+        .price-small{font-size:12px;color:var(--muted)}
+    </style>
+</head>
+<body>
+
+    <!-- Navbar (mantener diseño del catálogo) -->
+    <nav class="navbar navbar-expand-lg navbar-custom py-3">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-3" href="index.html">
+        <div class="logo-circle brand-gradient">B</div>
+        <div>
+            <div class="brand-title">Bellas Boutique</div>
+            <small class="text-muted">Estilo & Elegancia</small>
+        </div>
+        </a>
+
+        <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarContenido"
+        aria-controls="navbarContenido"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+        >
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContenido">
+        <form class="d-none d-lg-flex mx-auto search-form" onsubmit="return false;">
+            <div class="input-group">
+            <span class="input-group-text search-icon">
+                <i class="bi bi-search"></i>
+            </span>
+            <input
+                class="form-control search-rounded"
+                type="search"
+                placeholder="Buscar productos..."
+                id="busquedaInput"
+            />
+            </div>
+        </form>
+
+        <ul class="navbar-nav align-items-lg-center ms-auto gap-lg-3 position-relative">
+            <li class="nav-item">
+            <a class="nav-link active-link" href="catalogo.html">Catálogo</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="soporte.html">Soporte</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link icon-link" href="perfil.html">
+                <i class="bi bi-person"></i>
+            </a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link icon-link position-relative" href="carrito.html">
+                <i class="bi bi-cart3"></i>
+                <span class="cart-badge" id="cartBadge">0</span>
+            </a>
+            </li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+
+    <div class="container">
+        <div class="left">
+            <h1>Carrito de Compras</h1>
+
+            <div id="cart-list">
+                <!-- items render here -->
+            </div>
+
+        </div>
+
+        <aside class="right">
+            <div class="summary">
+                <h3>Resumen del Pedido</h3>
+                <div class="coupon">
+                    <input id="coupon-code" placeholder="Ej: BELLAS10" />
+                    <button class="btn-apply" id="apply-coupon">Aplicar</button>
+                </div>
+
+                <div class="summary-row"><div>Subtotal</div><div id="subtotal">₡0</div></div>
+                <div class="summary-row"><div>Envío</div><div id="shipping" class="muted">—</div></div>
+
+                <div class="summary-total"><div>Total</div><div id="total">₡0</div></div>
+
+                <button class="btn-primary" id="checkout">Proceder al Pago →</button>
+                <button class="btn-secondary" id="continue">Continuar Comprando</button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Footer (fijo y full-width) -->
+    <footer class="footer-gradient mt-5">
+    <div class="container">
+        <div class="row g-4">
+        <div class="col-md-3">
+            <h4 class="fw-bold">Bellas Boutique</h4>
+            <p class="mb-0">
+            Tu destino para moda elegante y accesorios únicos.
+            </p>
+        </div>
+
+        <div class="col-md-3">
+            <h5 class="fw-bold">Comprar</h5>
+            <ul class="list-unstyled footer-links">
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="catalogo.html">Nuevos Ingresos</a></li>
+            <li><a href="catalogo.html">Ofertas</a></li>
+            </ul>
+        </div>
+
+        <div class="col-md-3">
+            <h5 class="fw-bold">Ayuda</h5>
+            <ul class="list-unstyled footer-links">
+            <li><a href="soporte.html">Soporte</a></li>
+            <li><a href="soporte.html">Envíos</a></li>
+            <li><a href="soporte.html">Devoluciones</a></li>
+            </ul>
+        </div>
+
+        <div class="col-md-3">
+            <h5 class="fw-bold">Contacto</h5>
+            <ul class="list-unstyled footer-links">
+            <li>info@bellasboutique.com</li>
+            <li>+506 2222-3333</li>
+            <li>+506 8888-9999</li>
+            </ul>
+        </div>
+        </div>
+
+        <hr class="footer-divider" />
+        <p class="text-center mb-0">© 2026 Bellas Boutique. Todos los derechos reservados.</p>
+    </div>
+    </footer>
+
+    <script>
+        const CART_KEY = 'bb_cart_v1';
+        let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        let coupon = null;
+
+        function save() { localStorage.setItem(CART_KEY, JSON.stringify(cart)); updateBadge(); }
+        function format(n){ return '₡' + n.toLocaleString(); }
+
+                // lightweight toast used in this page (matches catalogo style)
+                (function ensureToastContainer(){
+                        if(document.getElementById('bb-toast-cart')) return;
+                        const div = document.createElement('div');
+                        div.id = 'bb-toast-cart';
+                        div.style.position = 'fixed';
+                        div.style.right = '18px';
+                        div.style.bottom = '18px';
+                        div.style.zIndex = '1050';
+                        document.body.appendChild(div);
+                })();
+
+        function showToast(message, opts={}){
+            // Ensure toast container exists; if not, create it to avoid native alert.
+            let container = document.getElementById('bb-toast-cart');
+            if(!container){
+                const div = document.createElement('div');
+                div.id = 'bb-toast-cart';
+                div.style.position = 'fixed';
+                div.style.right = '18px';
+                div.style.bottom = '18px';
+                div.style.zIndex = '1050';
+                document.body.appendChild(div);
+                container = div;
+            }
+                        const id = 't' + Date.now();
+                        const type = opts.type === 'danger' ? 'danger' : 'success';
+                        const actionText = opts.actionText || null;
+                        const action = opts.action || null;
+                        const el = document.createElement('div');
+                        el.id = id;
+                        el.className = 'toast show';
+                        el.style.minWidth = '240px';
+                        el.style.marginTop = '8px';
+                        el.style.boxShadow = '0 6px 20px rgba(0,0,0,0.12)';
+                        el.innerHTML = `
+                                <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:${type==='danger'? '#fee2e2':'#f8fafc'};">
+                                    <div style="flex:1">
+                                        <div style="font-weight:700;color:${type==='danger'? '#b91c1c':'#0f1724'}">${message}</div>
+                                    </div>
+                                    ${actionText? `<button class="btn btn-sm btn-outline-primary" id="${id}-act">${actionText}</button>` : ''}
+                                    <button class="btn-close" aria-label="Cerrar" id="${id}-close" style="margin-left:8px"></button>
+                                </div>
+                        `;
+                        container.appendChild(el);
+                        if(actionText && action){ el.querySelector('#'+id+'-act').addEventListener('click', action); }
+                        el.querySelector('#'+id+'-close').addEventListener('click', ()=>{ el.remove(); });
+                        setTimeout(()=>{ if(document.getElementById(id)) document.getElementById(id).remove(); }, 5000);
+                }
+
+        function updateBadge(){
+            const b = document.getElementById('cartBadge');
+            if(!b) return;
+            const totalQty = cart.reduce((s,i)=>s+i.qty,0);
+            b.textContent = totalQty;
+        }
+
+        function renderCart(){
+            const list = document.getElementById('cart-list');
+            list.innerHTML = '';
+            if(cart.length === 0){
+                list.innerHTML = '<p class="muted">No hay productos en el carrito.</p>';
+                recalcTotals();
+                updateBadge();
+                return;
+            }
+            cart.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'cart-item';
+                el.innerHTML = `
+                    <div class="ci-img"><img src="${item.img || 'https://via.placeholder.com/300'}" alt=""></div>
+                    <div class="ci-info">
+                        <div class="ci-title">${escapeHtml(item.name)}</div>
+                        <div class="ci-meta">Color: ${escapeHtml(item.color)} | Talla: ${escapeHtml(item.size)}</div>
+                        <div class="qty">
+                            <button data-action="dec" data-id="${item.id}">−</button>
+                            <span>${item.qty}</span>
+                            <button data-action="inc" data-id="${item.id}">+</button>
+                        </div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="ci-price">${format(item.price * item.qty)}</div>
+                        <div class="ci-sub">${format(item.price)} c/u</div>
+                    </div>
+                    <button class="trash" data-action="remove" data-id="${item.id}" title="Eliminar">
+                        🗑️
+                    </button>
+                `;
+                list.appendChild(el);
+            });
+
+            list.querySelectorAll('button[data-action]').forEach(btn=>{
+                btn.addEventListener('click', e=>{
+                    const id = btn.dataset.id;
+                    const action = btn.dataset.action;
+                    if(action==='inc') updateQuantity(id, +1);
+                    if(action==='dec') updateQuantity(id, -1);
+                    if(action==='remove') removeItem(id);
+                });
+            });
+            recalcTotals();
+            updateBadge();
+        }
+
+        function updateQuantity(id, delta){
+            const it = cart.find(i=>i.id==id);
+            if(!it) return;
+            it.qty = Math.max(1, it.qty + delta);
+            save();
+            renderCart();
+        }
+
+        function removeItem(id){
+            cart = cart.filter(i=>i.id!=id);
+            save();
+            renderCart();
+        }
+
+        function recalcTotals(){
+            const subtotalNum = cart.reduce((s,i)=>s + i.price * i.qty, 0);
+            const subtotalEl = document.getElementById('subtotal');
+            const shippingEl = document.getElementById('shipping');
+            const totalEl = document.getElementById('total');
+
+            let shipping = 0;
+
+            if(subtotalNum === 0) {
+                shippingEl.textContent = '—';
+                subtotalEl.textContent = '₡0';
+                totalEl.textContent = '₡0';
+                return;
+            }
+            if(subtotalNum >= 150000) { shipping = 0; shippingEl.innerHTML = '<span style="color:green">¡Gratis!</span>'; }
+            else { shipping = 12000; shippingEl.textContent = format(shipping); }
+
+            let total = subtotalNum + shipping;
+
+            if(coupon === 'BELLAS10'){
+                // ejemplo 10% de descuento
+                total = Math.round(total * 0.9);
+            }
+
+            subtotalEl.textContent = format(subtotalNum);
+            totalEl.textContent = format(total);
+        }
+
+        document.getElementById('apply-coupon').addEventListener('click', ()=>{
+            const code = document.getElementById('coupon-code').value.trim().toUpperCase();
+            if(!code){ showToast('Ingrese un código.', { type: 'danger' }); return; }
+            if(code === 'BELLAS10'){
+                coupon = code;
+                showToast('Cupón aplicado: 10% de descuento', { type: 'success' });
+            } else {
+                coupon = null;
+                showToast('Cupón no válido', { type: 'danger' });
+            }
+            recalcTotals();
+        });
+
+        document.getElementById('continue').addEventListener('click', ()=>{
+            window.location.href = 'catalogo.html';
+        });
+
+        document.getElementById('checkout').addEventListener('click', ()=>{
+            if(cart.length === 0){ showToast('El carrito está vacío', { type: 'danger' }); return; }
+            showToast('Proceder al pago (simulado).', { type: 'success' });
+        });
+
+         // función pública para que el catálogo llame:
+         window.addToCart = function(item){
+             if(!item || !item.id) return;
+            const found = cart.find(i=>i.id==item.id && i.color===item.color && i.size===item.size);
+            if(found) found.qty += item.qty || 1;
+            else cart.push(Object.assign({qty: item.qty || 1}, item));
+            save();
+            renderCart();
+        };
+
+         function escapeHtml(s){
+            return String(s || '').replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]); });
+        }
+
+        // Inicializar render del carrito (carga lo que hay en localStorage y actualiza badge)
+        (function init(){
+            // Si quieres precargar demo, descomenta y edita:
+            // if(!cart.length){ cart = demo; save(); }
+            renderCart();
+        })();
+    </script>
+</body>
+</html>

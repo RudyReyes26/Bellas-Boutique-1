@@ -153,12 +153,31 @@ a {
 
 .product-card {
     overflow: hidden;
+    /* Enable smooth hover transform and stacking */
+    transition: transform .18s ease, box-shadow .18s ease, opacity .12s ease;
+    position: relative;
+    z-index: 1;
 }
 
 .product-image {
     width: 100%;
-    height: 360px;
-    object-fit: cover;
+    height: 220px;
+    object-fit: contain;
+    padding: 12px;
+    background: #fafafa;
+}
+
+/* Hover effect: zoom the hovered card and slightly dim the others */
+#productosContainer.cards-hovering .product-card { 
+    opacity: 0.72;
+    transform: none; /* reset for non-hovered */
+}
+
+#productosContainer .product-card.hovered {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.04);
+    box-shadow: 0 24px 48px rgba(14,20,30,0.12);
+    z-index: 50; /* place above siblings */
 }
 
 .price-primary {
@@ -223,6 +242,21 @@ a {
     font-size: 1.2rem;
 }
 
+.favorite-btn .bi-heart-fill {
+    color: #ff3b3b;
+}
+
+/* Highlight animation when an item becomes favorite */
+.fav-highlight {
+    animation: fav-glow 900ms ease;
+}
+
+@keyframes fav-glow {
+    0% { transform: translateY(-8px); box-shadow: 0 18px 40px rgba(247,37,133,0.12); }
+    50% { transform: translateY(0); box-shadow: 0 10px 28px rgba(247,37,133,0.08); }
+    100% { transform: translateY(0); box-shadow: none; }
+}
+
 .product-title {
     font-size: 1.9rem;
     font-weight: 700;
@@ -262,7 +296,7 @@ a {
     }
 
     .product-image {
-    height: 280px;
+    height: 180px;
         }
 
     .product-title {

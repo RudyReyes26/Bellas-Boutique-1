@@ -165,34 +165,271 @@
     const cartBadge = document.getElementById("cartBadge");
     const filtroBtns = document.querySelectorAll(".btn-filter");
 
+    // Usar la misma clave y forma que usa `carrito.html`
+    const CART_KEY = 'bb_cart_v1';
+    // Favoritos (guardados en localStorage para persistencia front-end)
+    const FAV_KEY = 'bb_fav_v1';
+
+    function obtenerFavoritos(){
+        return JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
+    }
+
+    function guardarFavoritos(favs){
+        localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+    }
+
+    function toggleFavorite(productoId){
+        const favs = obtenerFavoritos();
+        const id = Number(productoId);
+        const idx = favs.indexOf(id);
+        let msg = '';
+        if(idx === -1){
+            favs.unshift(id); // guardar como primero
+            msg = 'Producto añadido a favoritos';
+        } else {
+            favs.splice(idx,1);
+            msg = 'Producto eliminado de favoritos';
+        }
+        guardarFavoritos(favs);
+        // re-render y llevar al tope (favoritos aparecen primero)
+        renderProductos();
+        // aplicar highlight temporal al producto que se marcó
+        setTimeout(()=>{
+            const card = document.querySelector(`[data-product-id="${id}"]`);
+            if(card){
+                card.classList.add('fav-highlight');
+                setTimeout(()=>card.classList.remove('fav-highlight'), 1000);
+            }
+            try{ window.scrollTo({ top: productosContainer.offsetTop - 20, behavior: 'smooth' }); }catch(e){}
+        }, 120);
+        showToast(msg, { actionText: 'Ver favoritos', action: ()=>{ window.scrollTo({ top: productosContainer.offsetTop - 20, behavior: 'smooth' }); } });
+    }
+
     function obtenerCarrito() {
-        return JSON.parse(localStorage.getItem("carrito")) || [];
+        return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
     }
 
     function guardarCarrito(carrito) {
-        localStorage.setItem("carrito", JSON.stringify(carrito));
+        localStorage.setItem(CART_KEY, JSON.stringify(carrito));
     }
 
     function actualizarBadgeCarrito() {
         const carrito = obtenerCarrito();
-        const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+        const totalItems = carrito.reduce((acc, item) => acc + (item.qty || 0), 0);
         cartBadge.textContent = totalItems;
     }
 
-    function agregarAlCarrito(productoId) {
-        const carrito = obtenerCarrito();
-        const itemExistente = carrito.find(item => item.productoId === productoId);
-
-        if (itemExistente) {
-        itemExistente.cantidad += 1;
-        } else {
-        carrito.push({ productoId, cantidad: 1 });
+        function agregarAlCarrito(productoId) {
+                // legacy simple add without options (kept for backward compatibility)
+                agregarAlCarritoConOpciones(productoId, { color: '', size: '', qty: 1 });
         }
 
-        guardarCarrito(carrito);
-        actualizarBadgeCarrito();
-        alert("Producto agregado al carrito.");
-    }
+        function agregarAlCarritoConOpciones(productoId, options){
+                const carrito = obtenerCarrito();
+                const producto = seedProductos.find(p => p.id === productoId);
+                if (!producto) { showToast('Producto no encontrado', { type: 'danger' }); return; }
+
+                const nuevo = {
+                        id: producto.id,
+                        name: producto.nombre,
+                        img: producto.imagen,
+                        price: producto.precio,
+                        color: options.color || '',
+                        size: options.size || '',
+                        qty: Number(options.qty) || 1
+                };
+
+                const existente = carrito.find(i => i.id === nuevo.id && i.color === nuevo.color && i.size === nuevo.size);
+                if (existente) existente.qty = (existente.qty || 0) + nuevo.qty;
+                else carrito.push(nuevo);
+
+                guardarCarrito(carrito);
+                actualizarBadgeCarrito();
+                showToast('Producto agregado al carrito', { actionText: 'Ver carrito', action: ()=> window.location.href='carrito.html' });
+        }
+
+        // Open a bootstrap modal to pick options before adding
+        function openAddModal(productoId){
+                const producto = seedProductos.find(p => p.id === productoId);
+                if(!producto) return showToast('Producto no encontrado', { type: 'danger' });
+                // Inject modal if missing
+                injectModalAndToast();
+                const modal = document.getElementById('addModal');
+                modal.querySelector('.modal-title').textContent = producto.nombre;
+                modal.querySelector('#modalProductImg').src = producto.imagen;
+                modal.querySelector('#modalQty').value = 1;
+                modal.dataset.productId = productoId;
+            // ajustar opciones de talla según categoría
+            const sizeSelect = modal.querySelector('#modalSize');
+            if (producto.categoria === 'Accesorios') {
+                // una sola opción - talla única
+                sizeSelect.innerHTML = '<option value="Talla única">Talla única</option>';
+                sizeSelect.value = 'Talla única';
+                sizeSelect.disabled = true;
+            } else if (producto.categoria === 'Calzado') {
+                // tallas numéricas del 31 al 42
+                let opts = '<option value="">-- Seleccionar --</option>';
+                for (let t = 31; t <= 42; t++) opts += `<option value="${t}">${t}</option>`;
+                sizeSelect.innerHTML = opts;
+                sizeSelect.disabled = false;
+            } else {
+                // tallas por defecto
+                sizeSelect.innerHTML = '<option value="">-- Seleccionar --</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>';
+                sizeSelect.disabled = false;
+            }
+
+            // ajustar opciones de color según categoría (Accesorios -> Color único)
+            const colorSelect = modal.querySelector('#modalColor');
+            const colorText = modal.querySelector('#modalColorText');
+            if (producto.categoria === 'Accesorios') {
+                colorSelect.innerHTML = '<option value="Color único">Color único</option>';
+                colorSelect.value = 'Color único';
+                colorSelect.disabled = true;
+                // ocultar select y mostrar texto
+                colorSelect.style.display = 'none';
+                if(colorText){ colorText.textContent = 'Color único'; colorText.style.display = 'block'; }
+            } else {
+                // opciones por defecto (mantenemos las existentes)
+                colorSelect.innerHTML = '<option value="">-- Seleccionar --</option><option>Negro</option><option>Blanco</option><option>Rosa</option>';
+                colorSelect.disabled = false;
+                colorSelect.style.display = '';
+                if(colorText) colorText.style.display = 'none';
+            }
+
+            const bs = new bootstrap.Modal(modal);
+            bs.show();
+        }
+
+        function confirmAddFromModal(){
+                const modal = document.getElementById('addModal');
+                const productoId = Number(modal.dataset.productId);
+    const colorTextEl = modal.querySelector('#modalColorText');
+    let color = (colorTextEl && colorTextEl.style.display !== 'none') ? colorTextEl.textContent : modal.querySelector('#modalColor').value;
+    let size = modal.querySelector('#modalSize').value;
+    // si estaba deshabilitado (Accesorios) aseguramos un texto legible
+    if (modal.querySelector('#modalSize').disabled && size === 'Talla única') size = 'Talla única';
+            const modalError = modal.querySelector('#modalError');
+            // validar talla/color si los selects están visibles
+            modalError.style.display = 'none';
+            modalError.textContent = '';
+            const sizeEl = modal.querySelector('#modalSize');
+            const colorEl = modal.querySelector('#modalColor');
+            // si el select de talla está visible y requiere selección
+            if (sizeEl && sizeEl.style.display !== 'none' && !sizeEl.disabled && (!size || size === '')){
+                modalError.textContent = 'Por favor selecciona una talla.';
+                modalError.style.display = 'block';
+                return;
+            }
+            // si el select de color está visible y requiere selección
+            if (colorEl && colorEl.style.display !== 'none' && !colorEl.disabled && (!color || color === '')){
+                modalError.textContent = 'Por favor selecciona un color.';
+                modalError.style.display = 'block';
+                return;
+            }
+
+            const qty = Number(modal.querySelector('#modalQty').value) || 1;
+            // hide modal
+            bootstrap.Modal.getInstance(modal).hide();
+            // limpiar mensaje de error
+            modalError.style.display = 'none';
+            modalError.textContent = '';
+            agregarAlCarritoConOpciones(productoId, { color, size, qty });
+        }
+
+        // Lightweight toast implementation (no alert/confirm)
+        function injectModalAndToast(){
+                if(document.getElementById('addModal')) return;
+                const html = `
+                <!-- Add modal -->
+                <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-sm modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Producto</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <img id="modalProductImg" src="images/placeholder.svg" style="width:120px;height:120px;object-fit:contain;margin-bottom:8px;" onerror="this.onerror=null;this.src='images/placeholder.svg'" />
+                                <div id="modalError" class="text-danger small mb-2" style="display:none"></div>
+                                <div class="mb-2">
+                                    <label class="form-label">Color</label>
+                                    <select id="modalColor" class="form-select">
+                                        <option value="">-- Seleccionar --</option>
+                                        <option>Negro</option>
+                                        <option>Blanco</option>
+                                        <option>Rosa</option>
+                                    </select>
+                                    <div id="modalColorText" style="display:none;margin-top:6px;font-weight:600;">Color único</div>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Talla</label>
+                                    <select id="modalSize" class="form-select">
+                                        <option value="">-- Seleccionar --</option>
+                                        <option>S</option>
+                                        <option>M</option>
+                                        <option>L</option>
+                                        <option>XL</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Cantidad</label>
+                                    <input id="modalQty" type="number" min="1" value="1" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-gradient" onclick="confirmAddFromModal()">Agregar al carrito</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toast container -->
+                <div id="bb-toast" style="position:fixed;right:18px;bottom:18px;z-index:1050;"></div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', html);
+        }
+
+    function showToast(message, opts={}){
+        // Ensure toast container exists (create dynamically if needed)
+        let container = document.getElementById('bb-toast');
+        if(!container){
+            container = document.createElement('div');
+            container.id = 'bb-toast';
+            container.style.position = 'fixed';
+            container.style.right = '18px';
+            container.style.bottom = '18px';
+            container.style.zIndex = '1050';
+            document.body.appendChild(container);
+        }
+                const id = 't' + Date.now();
+                const type = opts.type === 'danger' ? 'danger' : 'success';
+                const actionText = opts.actionText || null;
+                const action = opts.action || null;
+
+                const el = document.createElement('div');
+                el.id = id;
+                el.className = 'toast show';
+                el.style.minWidth = '240px';
+                el.style.marginTop = '8px';
+                el.style.boxShadow = '0 6px 20px rgba(0,0,0,0.12)';
+                el.innerHTML = `
+                        <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:${type==='danger'? '#fee2e2':'#f8fafc'};">
+                            <div style="flex:1">
+                                <div style="font-weight:700;color:${type==='danger'? '#b91c1c':'#0f1724'}">${message}</div>
+                            </div>
+                            ${actionText? `<button class="btn btn-sm btn-outline-primary" id="${id}-act">${actionText}</button>` : ''}
+                            <button class="btn-close" aria-label="Cerrar" id="${id}-close" style="margin-left:8px"></button>
+                        </div>
+                `;
+                container.appendChild(el);
+
+                if(actionText && action){
+                        el.querySelector('#'+id+'-act').addEventListener('click', action);
+                }
+                el.querySelector('#'+id+'-close').addEventListener('click', ()=>{ el.remove(); });
+                setTimeout(()=>{ if(document.getElementById(id)) document.getElementById(id).remove(); }, 5000);
+        }
 
     function obtenerProductosFiltrados() {
         const textoBusqueda = busquedaInput.value.trim().toLowerCase();
@@ -221,6 +458,17 @@
         productosFiltrados.sort((a, b) => Number(b.destacado) - Number(a.destacado));
         }
 
+        // Priorizar favoritos (si el usuario marcó algunos) y respetar el orden guardado
+        const favs = obtenerFavoritos();
+        productosFiltrados.sort((a, b) => {
+            const ia = favs.indexOf(a.id);
+            const ib = favs.indexOf(b.id);
+            if (ia === -1 && ib === -1) return 0;
+            if (ia === -1) return 1; // a no es fav -> después
+            if (ib === -1) return -1; // b no es fav -> a antes
+            return ia - ib; // ambos son favs -> mantener orden de favs
+        });
+
         return productosFiltrados;
     }
 
@@ -232,6 +480,7 @@
 
     function renderProductos() {
         const productos = obtenerProductosFiltrados();
+        const favs = obtenerFavoritos();
 
         if (productos.length === 0) {
         productosContainer.innerHTML = `
@@ -245,17 +494,18 @@
         }
 
         productosContainer.innerHTML = productos.map(producto => `
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6 col-lg-4" data-product-id="${producto.id}">
             <div class="card card-soft product-card h-100 overflow-hidden">
             <div class="position-relative">
                 ${crearBadgeEtiqueta(producto.etiqueta)}
-                <button class="favorite-btn" type="button">
-                <i class="bi bi-heart"></i>
+                <button class="favorite-btn" type="button" onclick="toggleFavorite(${producto.id})">
+                <i class="bi ${favs.includes(producto.id) ? 'bi-heart-fill' : 'bi-heart'}"></i>
                 </button>
                 <img
                 src="${producto.imagen}"
                 class="card-img-top product-image"
                 alt="${producto.nombre}"
+                onerror="this.onerror=null; this.src='images/placeholder.svg'"
                 />
             </div>
 
@@ -264,8 +514,8 @@
 
                 <div class="product-rating mb-2">
                 <i class="bi bi-star-fill"></i>
-                <span>${producto.rating}</span>
-                <small class="text-muted">(${producto.reviews})</small>
+                <span>${producto.rating || '4.5'}</span>
+                <small class="text-muted">(${producto.reviews || 120})</small>
                 </div>
 
                 <div class="mb-3">
@@ -279,7 +529,7 @@
 
                 <button
                 class="btn btn-gradient mt-auto"
-                onclick="agregarAlCarrito(${producto.id})"
+                onclick="openAddModal(${producto.id})"
                 >
                 <i class="bi bi-cart3 me-2"></i>Agregar
                 </button>
@@ -287,6 +537,33 @@
             </div>
         </div>
         `).join("");
+        // Attach hover listeners so hovered card highlights over siblings
+        attachCardHover();
+    }
+
+    // Attach mouseenter/mouseleave to each product card to add a 'hovered' class
+    function attachCardHover(){
+        const cols = productosContainer.querySelectorAll('[data-product-id]');
+        cols.forEach(col => {
+            const card = col.querySelector('.product-card');
+            if(!card) return;
+            // remove previous listeners if any
+            if(card._enter) card.removeEventListener('mouseenter', card._enter);
+            if(card._leave) card.removeEventListener('mouseleave', card._leave);
+
+            const enter = () => {
+                productosContainer.classList.add('cards-hovering');
+                card.classList.add('hovered');
+            };
+            const leave = () => {
+                productosContainer.classList.remove('cards-hovering');
+                card.classList.remove('hovered');
+            };
+
+            card.addEventListener('mouseenter', enter);
+            card.addEventListener('mouseleave', leave);
+            card._enter = enter; card._leave = leave;
+        });
     }
 
     filtroBtns.forEach(btn => {
